@@ -10,6 +10,7 @@ const (
 
 type ResponseResult struct {
 	Success bool          `json:"success"`
+	Message string        `json:"message,omitempty"`
 	Data    interface{}   `json:"data,omitempty"`
 	Total   int64         `json:"total,omitempty"`
 	Error   *errors.Error `json:"error,omitempty"`

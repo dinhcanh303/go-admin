@@ -18,7 +18,7 @@ MaxThread = 2
 
 [Logger.Hooks.Options]
 Debug = "false"
-DBType = "sqlite3" # sqlite3/mysql/postgres
+DBType = "postgres" # sqlite3/mysql/postgres
 DSN = "data/go-admin.db"
 MaxOpenConns = "16"
 MaxIdleConns = "4"

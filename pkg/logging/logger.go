@@ -12,6 +12,7 @@ const (
 	TagKeyRecovery = "recovery"
 	TagKeyRequest  = "request"
 	TagKeyLogin    = "login"
+	TagKeyRegister = "register"
 	TagKeyLogout   = "logout"
 	TagKeySystem   = "system"
 	TagKeyOperate  = "operate"

@@ -37,10 +37,12 @@ type General struct {
 		KeyFile         string
 	}
 	Root struct {
-		ID       string `default:"root"`
-		Username string `default:"admin"`
-		Password string
-		Name     string `default:"Admin"`
+		ID        string `default:"root"`
+		Email     string `default:"admin@admin.com"`
+		FirstName string `default:admin"`
+		LastName  string `default:admin"`
+		Password  string
+		Name      string `default:"Admin"`
 	}
 }
 
@@ -63,12 +65,12 @@ type Storage struct {
 	}
 	DB struct {
 		Debug        bool
-		Type         string `default:"sqlite3"`          // sqlite3/mysql/postgres
-		DSN          string `default:"data/go-admin.db"` // database source name
-		MaxLifetime  int    `default:"86400"`            // seconds
-		MaxIdleTime  int    `default:"3600"`             // seconds
-		MaxOpenConns int    `default:"100"`              // connections
-		MaxIdleConns int    `default:"50"`               // connections
+		Type         string `default:"postgres"`                                                                              // sqlite3/mysql/postgres
+		DSN          string `default:"host=postgres user=postgres password=123456 dbname=go-admin port=5432 sslmode=disable"` // database source name
+		MaxLifetime  int    `default:"86400"`                                                                                 // seconds
+		MaxIdleTime  int    `default:"3600"`                                                                                  // seconds
+		MaxOpenConns int    `default:"100"`                                                                                   // connections
+		MaxIdleConns int    `default:"50"`                                                                                    // connections
 		TablePrefix  string `default:""`
 		AutoMigrate  bool
 		Resolver     []struct {

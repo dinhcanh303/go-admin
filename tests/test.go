@@ -31,12 +31,12 @@ func init() {
 		panic(err)
 	}
 
-	if err := injector.M.Init(ctx); err != nil {
+	if err := injector.Mods.Init(ctx); err != nil {
 		panic(err)
 	}
 
 	app = gin.New()
-	err = injector.M.RegisterRouters(ctx, app)
+	err = injector.Mods.RegisterRouters(ctx, app)
 	if err != nil {
 		panic(err)
 	}

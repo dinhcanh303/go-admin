@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"go-admin/internal/mods/rbac/schema"
+	"go-admin/internal/modules/auth/model"
 	"go-admin/pkg/util"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +13,7 @@ import (
 func TestMenu(t *testing.T) {
 	e := tester(t)
 
-	menuFormItem := schema.MenuForm{
+	menuFormItem := model.MenuForm{
 		Code:        "menu",
 		Name:        "Menu management",
 		Description: "Menu management",
@@ -21,10 +21,10 @@ func TestMenu(t *testing.T) {
 		Type:        "page",
 		Path:        "/system/menu",
 		Properties:  `{"icon":"menu"}`,
-		Status:      schema.MenuStatusEnabled,
+		Status:      model.MenuStatusEnabled,
 	}
 
-	var menu schema.Menu
+	var menu model.Menu
 	e.POST(baseAPI + "/menus").WithJSON(menuFormItem).
 		Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &menu})
 
@@ -39,17 +39,17 @@ func TestMenu(t *testing.T) {
 	assert.Equal(menuFormItem.Properties, menu.Properties)
 	assert.Equal(menuFormItem.Status, menu.Status)
 
-	var menus schema.Menus
+	var menus model.Menus
 	e.GET(baseAPI + "/menus").Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &menus})
 	assert.GreaterOrEqual(len(menus), 1)
 
 	newName := "Menu management 1"
-	newStatus := schema.MenuStatusDisabled
+	newStatus := model.MenuStatusDisabled
 	menu.Name = newName
 	menu.Status = newStatus
 	e.PUT(baseAPI + "/menus/" + menu.ID).WithJSON(menu).Expect().Status(http.StatusOK)
 
-	var getMenu schema.Menu
+	var getMenu model.Menu
 	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getMenu})
 	assert.Equal(newName, getMenu.Name)
 	assert.Equal(newStatus, getMenu.Status)

@@ -44,7 +44,7 @@ func startHTTPServer(ctx context.Context, injector *wirex.Injector) (func(), err
 		util.ResError(c, errors.NotFound("", "Not Found"))
 	})
 
-	allowedPrefixes := injector.M.RouterPrefixes()
+	allowedPrefixes := injector.Mods.RouterPrefixes()
 
 	// Register middlewares
 	if err := useHTTPMiddlewares(ctx, e, injector, allowedPrefixes); err != nil {
@@ -52,7 +52,7 @@ func startHTTPServer(ctx context.Context, injector *wirex.Injector) (func(), err
 	}
 
 	// Register routers
-	if err := injector.M.RegisterRouters(ctx, e); err != nil {
+	if err := injector.Mods.RegisterRouters(ctx, e); err != nil {
 		return nil, err
 	}
 
@@ -143,7 +143,7 @@ func useHTTPMiddlewares(_ context.Context, e *gin.Engine, injector *wirex.Inject
 	e.Use(middleware.AuthWithConfig(middleware.AuthConfig{
 		AllowedPathPrefixes: allowedPrefixes,
 		SkippedPathPrefixes: config.C.Middleware.Auth.SkippedPathPrefixes,
-		ParseUserID:         injector.M.RBAC.LoginAPI.LoginBIZ.ParseUserID,
+		ParseUserID:         injector.Mods.Auth.AuthAPI.AuthService.ParseUserID,
 		RootID:              config.C.General.Root.ID,
 	}))
 
@@ -178,7 +178,7 @@ func useHTTPMiddlewares(_ context.Context, e *gin.Engine, injector *wirex.Inject
 			return false
 		},
 		GetEnforcer: func(c *gin.Context) *casbin.Enforcer {
-			return injector.M.RBAC.Casbinx.GetEnforcer()
+			return injector.Mods.Auth.Casbinx.GetEnforcer()
 		},
 		GetSubjects: func(c *gin.Context) []string {
 			return util.FromUserCache(c.Request.Context()).RoleIDs

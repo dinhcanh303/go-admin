@@ -80,10 +80,11 @@ func ResJSON(c *gin.Context, status int, v interface{}) {
 	c.Abort()
 }
 
-func ResSuccess(c *gin.Context, v interface{}) {
+func ResSuccess(c *gin.Context, v interface{}, message string) {
 	ResJSON(c, http.StatusOK, ResponseResult{
 		Success: true,
 		Data:    v,
+		Message: message,
 	})
 }
 

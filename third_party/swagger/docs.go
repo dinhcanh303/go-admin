@@ -18,7 +18,7 @@ const docTemplate = `{
         "/api/v1/captcha/id": {
             "get": {
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Get captcha ID",
                 "responses": {
@@ -33,7 +33,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.Captcha"
+                                            "$ref": "#/definitions/model.Captcha"
                                         }
                                     }
                                 }
@@ -49,7 +49,7 @@ const docTemplate = `{
                     "image/png"
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Response captcha image",
                 "parameters": [
@@ -88,7 +88,7 @@ const docTemplate = `{
                     }
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Logout system",
                 "responses": {
@@ -115,7 +115,7 @@ const docTemplate = `{
                     }
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Query current user menus based on the current user role",
                 "responses": {
@@ -132,7 +132,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.Menu"
+                                                "$ref": "#/definitions/model.Menu"
                                             }
                                         }
                                     }
@@ -163,7 +163,7 @@ const docTemplate = `{
                     }
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Change current user password",
                 "parameters": [
@@ -173,7 +173,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UpdateLoginPassword"
+                            "$ref": "#/definitions/model.UpdateLoginPassword"
                         }
                     }
                 ],
@@ -213,7 +213,7 @@ const docTemplate = `{
                     }
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Refresh current access token",
                 "responses": {
@@ -228,7 +228,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.LoginToken"
+                                            "$ref": "#/definitions/model.LoginToken"
                                         }
                                     }
                                 }
@@ -258,7 +258,7 @@ const docTemplate = `{
                     }
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Get current user info",
                 "responses": {
@@ -273,7 +273,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.User"
+                                            "$ref": "#/definitions/model.User"
                                         }
                                     }
                                 }
@@ -301,7 +301,7 @@ const docTemplate = `{
                     }
                 ],
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Update current user info",
                 "parameters": [
@@ -311,7 +311,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UpdateCurrentUser"
+                            "$ref": "#/definitions/model.UpdateCurrentUser"
                         }
                     }
                 ],
@@ -428,7 +428,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.Logger"
+                                                "$ref": "#/definitions/model.Logger"
                                             }
                                         }
                                     }
@@ -454,7 +454,7 @@ const docTemplate = `{
         "/api/v1/login": {
             "post": {
                 "tags": [
-                    "LoginAPI"
+                    "AuthAPI"
                 ],
                 "summary": "Login system with username and password",
                 "parameters": [
@@ -464,7 +464,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.LoginForm"
+                            "$ref": "#/definitions/model.LoginForm"
                         }
                     }
                 ],
@@ -480,7 +480,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.LoginToken"
+                                            "$ref": "#/definitions/model.LoginToken"
                                         }
                                     }
                                 }
@@ -547,7 +547,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.Menu"
+                                                "$ref": "#/definitions/model.Menu"
                                             }
                                         }
                                     }
@@ -586,7 +586,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.MenuForm"
+                            "$ref": "#/definitions/model.MenuForm"
                         }
                     }
                 ],
@@ -602,7 +602,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.Menu"
+                                            "$ref": "#/definitions/model.Menu"
                                         }
                                     }
                                 }
@@ -662,7 +662,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.Menu"
+                                            "$ref": "#/definitions/model.Menu"
                                         }
                                     }
                                 }
@@ -707,7 +707,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.MenuForm"
+                            "$ref": "#/definitions/model.MenuForm"
                         }
                     }
                 ],
@@ -834,7 +834,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.Role"
+                                                "$ref": "#/definitions/model.Role"
                                             }
                                         }
                                     }
@@ -873,7 +873,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.RoleForm"
+                            "$ref": "#/definitions/model.RoleForm"
                         }
                     }
                 ],
@@ -889,7 +889,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.Role"
+                                            "$ref": "#/definitions/model.Role"
                                         }
                                     }
                                 }
@@ -949,7 +949,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.Role"
+                                            "$ref": "#/definitions/model.Role"
                                         }
                                     }
                                 }
@@ -994,7 +994,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.RoleForm"
+                            "$ref": "#/definitions/model.RoleForm"
                         }
                     }
                 ],
@@ -1127,7 +1127,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/schema.User"
+                                                "$ref": "#/definitions/model.User"
                                             }
                                         }
                                     }
@@ -1166,7 +1166,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserForm"
+                            "$ref": "#/definitions/model.UserForm"
                         }
                     }
                 ],
@@ -1182,7 +1182,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.User"
+                                            "$ref": "#/definitions/model.User"
                                         }
                                     }
                                 }
@@ -1242,7 +1242,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.User"
+                                            "$ref": "#/definitions/model.User"
                                         }
                                     }
                                 }
@@ -1287,7 +1287,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserForm"
+                            "$ref": "#/definitions/model.UserForm"
                         }
                     }
                 ],
@@ -1420,7 +1420,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.Captcha": {
+        "model.Captcha": {
             "type": "object",
             "properties": {
                 "captcha_id": {
@@ -1429,7 +1429,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.Logger": {
+        "model.Logger": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1478,7 +1478,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.LoginForm": {
+        "model.LoginForm": {
             "type": "object",
             "required": [
                 "captcha_code",
@@ -1505,7 +1505,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.LoginToken": {
+        "model.LoginToken": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -1522,14 +1522,14 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.Menu": {
+        "model.Menu": {
             "type": "object",
             "properties": {
                 "children": {
                     "description": "Child menus",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.Menu"
+                        "$ref": "#/definitions/model.Menu"
                     }
                 },
                 "code": {
@@ -1572,7 +1572,7 @@ const docTemplate = `{
                     "description": "Resources of menu",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.MenuResource"
+                        "$ref": "#/definitions/model.MenuResource"
                     }
                 },
                 "sequence": {
@@ -1593,7 +1593,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.MenuForm": {
+        "model.MenuForm": {
             "type": "object",
             "required": [
                 "code",
@@ -1632,7 +1632,7 @@ const docTemplate = `{
                     "description": "Resources of menu",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.MenuResource"
+                        "$ref": "#/definitions/model.MenuResource"
                     }
                 },
                 "sequence": {
@@ -1657,7 +1657,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.MenuResource": {
+        "model.MenuResource": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1686,7 +1686,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.Role": {
+        "model.Role": {
             "type": "object",
             "properties": {
                 "code": {
@@ -1709,7 +1709,7 @@ const docTemplate = `{
                     "description": "Role menu list",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.RoleMenu"
+                        "$ref": "#/definitions/model.RoleMenu"
                     }
                 },
                 "name": {
@@ -1730,7 +1730,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.RoleForm": {
+        "model.RoleForm": {
             "type": "object",
             "required": [
                 "code",
@@ -1751,7 +1751,7 @@ const docTemplate = `{
                     "description": "Role menu list",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.RoleMenu"
+                        "$ref": "#/definitions/model.RoleMenu"
                     }
                 },
                 "name": {
@@ -1773,7 +1773,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.RoleMenu": {
+        "model.RoleMenu": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1798,7 +1798,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UpdateCurrentUser": {
+        "model.UpdateCurrentUser": {
             "type": "object",
             "required": [
                 "name"
@@ -1826,7 +1826,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UpdateLoginPassword": {
+        "model.UpdateLoginPassword": {
             "type": "object",
             "required": [
                 "new_password",
@@ -1843,7 +1843,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.User": {
+        "model.User": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1874,7 +1874,7 @@ const docTemplate = `{
                     "description": "Roles of user",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.UserRole"
+                        "$ref": "#/definitions/model.UserRole"
                     }
                 },
                 "status": {
@@ -1891,7 +1891,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserForm": {
+        "model.UserForm": {
             "type": "object",
             "required": [
                 "name",
@@ -1929,7 +1929,7 @@ const docTemplate = `{
                     "description": "Roles of user",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.UserRole"
+                        "$ref": "#/definitions/model.UserRole"
                     }
                 },
                 "status": {
@@ -1947,7 +1947,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserRole": {
+        "model.UserRole": {
             "type": "object",
             "properties": {
                 "created_at": {

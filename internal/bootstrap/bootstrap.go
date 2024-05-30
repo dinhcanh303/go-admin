@@ -73,8 +73,7 @@ func Run(ctx context.Context, runCfg RunConfig) error {
 	if err != nil {
 		return err
 	}
-
-	if err := injector.M.Init(ctx); err != nil {
+	if err := injector.Mods.Init(ctx); err != nil {
 		return err
 	}
 
@@ -88,7 +87,7 @@ func Run(ctx context.Context, runCfg RunConfig) error {
 		}
 
 		return func() {
-			if err := injector.M.Release(ctx); err != nil {
+			if err := injector.Mods.Release(ctx); err != nil {
 				logging.Context(ctx).Error("failed to release injector", zap.Error(err))
 			}
 

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"go-admin/internal/config"
-	"go-admin/internal/mods"
+	"go-admin/internal/modules"
 	"go-admin/pkg/cachex"
 	"go-admin/pkg/gormx"
 	"go-admin/pkg/jwtx"
@@ -18,7 +18,7 @@ type Injector struct {
 	DB    *gorm.DB
 	Cache cachex.Cacher
 	Auth  jwtx.Auther
-	M     *mods.Mods
+	Mods  *modules.Modules
 }
 
 // It creates a new database connection, and returns a function that closes the connection

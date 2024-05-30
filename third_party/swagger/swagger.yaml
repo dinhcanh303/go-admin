@@ -10,13 +10,13 @@ definitions:
       status:
         type: string
     type: object
-  schema.Captcha:
+  model.Captcha:
     properties:
       captcha_id:
         description: Captcha ID
         type: string
     type: object
-  schema.Logger:
+  model.Logger:
     properties:
       created_at:
         description: Create time
@@ -52,7 +52,7 @@ definitions:
         description: From User.Name
         type: string
     type: object
-  schema.LoginForm:
+  model.LoginForm:
     properties:
       captcha_code:
         description: Captcha verify code
@@ -72,7 +72,7 @@ definitions:
     - password
     - username
     type: object
-  schema.LoginToken:
+  model.LoginToken:
     properties:
       access_token:
         description: Access token (JWT)
@@ -84,12 +84,12 @@ definitions:
         description: 'Token type (Usage: Authorization=${token_type} ${access_token})'
         type: string
     type: object
-  schema.Menu:
+  model.Menu:
     properties:
       children:
         description: Child menus
         items:
-          $ref: '#/definitions/schema.Menu'
+          $ref: '#/definitions/model.Menu'
         type: array
       code:
         description: Code of menu (unique for each level)
@@ -121,7 +121,7 @@ definitions:
       resources:
         description: Resources of menu
         items:
-          $ref: '#/definitions/schema.MenuResource'
+          $ref: '#/definitions/model.MenuResource'
         type: array
       sequence:
         description: Sequence for sorting (Order by desc)
@@ -136,7 +136,7 @@ definitions:
         description: Update time
         type: string
     type: object
-  schema.MenuForm:
+  model.MenuForm:
     properties:
       code:
         description: Code of menu (unique for each level)
@@ -161,7 +161,7 @@ definitions:
       resources:
         description: Resources of menu
         items:
-          $ref: '#/definitions/schema.MenuResource'
+          $ref: '#/definitions/model.MenuResource'
         type: array
       sequence:
         description: Sequence for sorting (Order by desc)
@@ -184,7 +184,7 @@ definitions:
     - status
     - type
     type: object
-  schema.MenuResource:
+  model.MenuResource:
     properties:
       created_at:
         description: Create time
@@ -205,7 +205,7 @@ definitions:
         description: Update time
         type: string
     type: object
-  schema.Role:
+  model.Role:
     properties:
       code:
         description: Code of role (unique)
@@ -222,7 +222,7 @@ definitions:
       menus:
         description: Role menu list
         items:
-          $ref: '#/definitions/schema.RoleMenu'
+          $ref: '#/definitions/model.RoleMenu'
         type: array
       name:
         description: Display name of role
@@ -237,7 +237,7 @@ definitions:
         description: Update time
         type: string
     type: object
-  schema.RoleForm:
+  model.RoleForm:
     properties:
       code:
         description: Code of role (unique)
@@ -249,7 +249,7 @@ definitions:
       menus:
         description: Role menu list
         items:
-          $ref: '#/definitions/schema.RoleMenu'
+          $ref: '#/definitions/model.RoleMenu'
         type: array
       name:
         description: Display name of role
@@ -269,7 +269,7 @@ definitions:
     - name
     - status
     type: object
-  schema.RoleMenu:
+  model.RoleMenu:
     properties:
       created_at:
         description: Create time
@@ -287,7 +287,7 @@ definitions:
         description: Update time
         type: string
     type: object
-  schema.UpdateCurrentUser:
+  model.UpdateCurrentUser:
     properties:
       email:
         description: Email of user
@@ -308,7 +308,7 @@ definitions:
     required:
     - name
     type: object
-  schema.UpdateLoginPassword:
+  model.UpdateLoginPassword:
     properties:
       new_password:
         description: New password (md5 hash)
@@ -320,7 +320,7 @@ definitions:
     - new_password
     - old_password
     type: object
-  schema.User:
+  model.User:
     properties:
       created_at:
         description: Create time
@@ -343,7 +343,7 @@ definitions:
       roles:
         description: Roles of user
         items:
-          $ref: '#/definitions/schema.UserRole'
+          $ref: '#/definitions/model.UserRole'
         type: array
       status:
         description: Status of user (activated, freezed)
@@ -355,7 +355,7 @@ definitions:
         description: Username for login
         type: string
     type: object
-  schema.UserForm:
+  model.UserForm:
     properties:
       email:
         description: Email of user
@@ -380,7 +380,7 @@ definitions:
       roles:
         description: Roles of user
         items:
-          $ref: '#/definitions/schema.UserRole'
+          $ref: '#/definitions/model.UserRole'
         type: array
       status:
         description: Status of user (activated, freezed)
@@ -398,7 +398,7 @@ definitions:
     - status
     - username
     type: object
-  schema.UserRole:
+  model.UserRole:
     properties:
       created_at:
         description: Create time
@@ -446,11 +446,11 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.Captcha'
+                  $ref: '#/definitions/model.Captcha'
               type: object
       summary: Get captcha ID
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/captcha/image:
     get:
       parameters:
@@ -474,7 +474,7 @@ paths:
             $ref: '#/definitions/util.ResponseResult'
       summary: Response captcha image
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/current/logout:
     post:
       responses:
@@ -490,7 +490,7 @@ paths:
       - ApiKeyAuth: []
       summary: Logout system
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/current/menus:
     get:
       responses:
@@ -502,7 +502,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.Menu'
+                    $ref: '#/definitions/model.Menu'
                   type: array
               type: object
         "401":
@@ -517,7 +517,7 @@ paths:
       - ApiKeyAuth: []
       summary: Query current user menus based on the current user role
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/current/password:
     put:
       parameters:
@@ -526,7 +526,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.UpdateLoginPassword'
+          $ref: '#/definitions/model.UpdateLoginPassword'
       responses:
         "200":
           description: OK
@@ -548,7 +548,7 @@ paths:
       - ApiKeyAuth: []
       summary: Change current user password
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/current/refresh-token:
     post:
       responses:
@@ -559,7 +559,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.LoginToken'
+                  $ref: '#/definitions/model.LoginToken'
               type: object
         "401":
           description: Unauthorized
@@ -573,7 +573,7 @@ paths:
       - ApiKeyAuth: []
       summary: Refresh current access token
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/current/user:
     get:
       responses:
@@ -584,7 +584,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.User'
+                  $ref: '#/definitions/model.User'
               type: object
         "401":
           description: Unauthorized
@@ -598,7 +598,7 @@ paths:
       - ApiKeyAuth: []
       summary: Get current user info
       tags:
-      - LoginAPI
+      - AuthAPI
     put:
       parameters:
       - description: Request body
@@ -606,7 +606,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.UpdateCurrentUser'
+          $ref: '#/definitions/model.UpdateCurrentUser'
       responses:
         "200":
           description: OK
@@ -628,7 +628,7 @@ paths:
       - ApiKeyAuth: []
       summary: Update current user info
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/loggers:
     get:
       parameters:
@@ -681,7 +681,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.Logger'
+                    $ref: '#/definitions/model.Logger'
                   type: array
               type: object
         "401":
@@ -705,7 +705,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.LoginForm'
+          $ref: '#/definitions/model.LoginForm'
       responses:
         "200":
           description: OK
@@ -714,7 +714,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.LoginToken'
+                  $ref: '#/definitions/model.LoginToken'
               type: object
         "400":
           description: Bad Request
@@ -726,7 +726,7 @@ paths:
             $ref: '#/definitions/util.ResponseResult'
       summary: Login system with username and password
       tags:
-      - LoginAPI
+      - AuthAPI
   /api/v1/menus:
     get:
       parameters:
@@ -751,7 +751,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.Menu'
+                    $ref: '#/definitions/model.Menu'
                   type: array
               type: object
         "401":
@@ -774,7 +774,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.MenuForm'
+          $ref: '#/definitions/model.MenuForm'
       responses:
         "200":
           description: OK
@@ -783,7 +783,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.Menu'
+                  $ref: '#/definitions/model.Menu'
               type: object
         "400":
           description: Bad Request
@@ -843,7 +843,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.Menu'
+                  $ref: '#/definitions/model.Menu'
               type: object
         "401":
           description: Unauthorized
@@ -870,7 +870,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.MenuForm'
+          $ref: '#/definitions/model.MenuForm'
       responses:
         "200":
           description: OK
@@ -925,7 +925,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.Role'
+                    $ref: '#/definitions/model.Role'
                   type: array
               type: object
         "401":
@@ -948,7 +948,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.RoleForm'
+          $ref: '#/definitions/model.RoleForm'
       responses:
         "200":
           description: OK
@@ -957,7 +957,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.Role'
+                  $ref: '#/definitions/model.Role'
               type: object
         "400":
           description: Bad Request
@@ -1017,7 +1017,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.Role'
+                  $ref: '#/definitions/model.Role'
               type: object
         "401":
           description: Unauthorized
@@ -1044,7 +1044,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.RoleForm'
+          $ref: '#/definitions/model.RoleForm'
       responses:
         "200":
           description: OK
@@ -1103,7 +1103,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/schema.User'
+                    $ref: '#/definitions/model.User'
                   type: array
               type: object
         "401":
@@ -1126,7 +1126,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.UserForm'
+          $ref: '#/definitions/model.UserForm'
       responses:
         "200":
           description: OK
@@ -1135,7 +1135,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.User'
+                  $ref: '#/definitions/model.User'
               type: object
         "400":
           description: Bad Request
@@ -1195,7 +1195,7 @@ paths:
             - $ref: '#/definitions/util.ResponseResult'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.User'
+                  $ref: '#/definitions/model.User'
               type: object
         "401":
           description: Unauthorized
@@ -1222,7 +1222,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/schema.UserForm'
+          $ref: '#/definitions/model.UserForm'
       responses:
         "200":
           description: OK

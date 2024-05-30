@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/wire"
 
-	"go-admin/internal/mods"
+	"go-admin/internal/modules"
 	"go-admin/pkg/util"
 )
 
@@ -21,7 +21,7 @@ func BuildInjector(ctx context.Context) (*Injector, func(), error) {
 		InitAuth,
 		wire.NewSet(wire.Struct(new(util.Trans), "*")),
 		wire.NewSet(wire.Struct(new(Injector), "*")),
-		mods.Set,
+		modules.Set,
 	) // end
 	return new(Injector), nil, nil
 }

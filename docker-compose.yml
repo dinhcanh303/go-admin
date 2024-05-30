@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    container_name: go-admin-pg
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=go-admin
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+    ports:
+      - 5445:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - go-admin
+  redis:
+    image: redis
+    container_name: go-admin-redis
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - REDIS_PASSWORD=password
+      - REDIS_REPLICATION_mode=master
+    ports:
+      - 6379:6379
+    networks:
+      - go-admin
+  redisinsight:
+    image: redislabs/redisinsight
+    container_name: go-admin-redisinsight
+    restart: unless-stopped
+    volumes:
+      - redis_data:/var/lib/redis
+    ports:
+      - 6001:6001
+    networks:
+      - go-admin
+  app:
+    build:
+      context: .
+    image: app
+    container_name: go-admin-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_NAME: 'search-service in docker'
+    depends_on:
+      - notification
+    ports:
+      - 8001:8001
+    networks:
+      - go-admin
+  prometheus:
+    image: prom/prometheus
+    container_name: go-admin-prom
+    restart: unless-stopped
+    volumes:
+      - prometheus_data:/prometheus
+    networks:
+      - go-admin
+    ports:
+      - "9090:9090"
+volumes:
+  pg-data: {}
+  redis_data: {}
+  prometheus_data: {}
+
+networks:
+    go-admin:
+      driver: bridge
+      name: go-admin
