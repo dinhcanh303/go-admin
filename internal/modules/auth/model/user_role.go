@@ -18,7 +18,7 @@ type UserRole struct {
 }
 
 func (a *UserRole) TableName() string {
-	return config.C.FormatTableName("user_role")
+	return config.C.FormatTableName("user_roles")
 }
 
 // Defining the query parameters for the `UserRole` struct.

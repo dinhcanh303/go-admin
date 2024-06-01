@@ -10,7 +10,7 @@ MenuFile = "menu.json" # Or use "menu_cn.json"
 DenyDeleteMenu = false
 
 [General.HTTP]
-Addr = ":8040"
+Addr = ":5001"
 ShutdownTimeout = 10
 ReadTimeout = 60
 WriteTimeout = 60
@@ -20,9 +20,9 @@ KeyFile = ""
 
 [General.Root] # Super Administrator Account
 ID = "root"
-Username = "admin"
+Email = "admin@admin.com"
 Password = "6351623c8cef86fefabfa7da046fc619" # MD5("abc-123")
-Name = "Admin"
+FullName = "Admin"
 
 [Storage]
 
@@ -50,7 +50,7 @@ Type = "postgres" # sqlite3/mysql/postgres
 # MySQL DSN
 # DSN = "root:123@tcp(127.0.0.1:3306)/go-admin?charset=utf8mb4&parseTime=True&loc=Local"
 # PostgreSQL DSN
-DSN = "host=db user=postgres password=123456 dbname=go-admin port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+DSN = "host=localhost user=postgres password=123456 dbname=go-admin port=5432 sslmode=disable"
 MaxLifetime = 86400
 MaxIdleTime = 3600
 MaxOpenConns = 100

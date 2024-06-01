@@ -31,7 +31,7 @@ func (a *Logger) Query(ctx context.Context, params schema.LoggerQueryParam, opts
 
 	db := a.DB.Table(fmt.Sprintf("%s AS a", new(schema.Logger).TableName()))
 	db = db.Joins(fmt.Sprintf("left join %s b on a.user_id=b.id", new(authModel.User).TableName()))
-	db = db.Select("a.*,b.name as user_name,b.username as login_name")
+	db = db.Select("a.*,b.full_name as user_name,b.email as login_email")
 
 	if v := params.Level; v != "" {
 		db = db.Where("a.level = ?", v)

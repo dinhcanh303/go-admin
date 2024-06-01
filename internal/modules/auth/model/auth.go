@@ -1,8 +1,6 @@
 package model
 
 import (
-	"go-admin/pkg/crypto/hash"
-	"go-admin/pkg/errors"
 	"strings"
 )
 
@@ -11,8 +9,8 @@ type Captcha struct {
 }
 
 type LoginForm struct {
-	Email       string `json:"email" binding:"required"`        // Login name
-	Password    string `json:"password" binding:"required"`     // Login password (md5 hash)
+	Email       string `json:"email" binding:"required"`        // Login email
+	Password    string `json:"password" binding:"required"`     // Login password
 	CaptchaID   string `json:"captcha_id" binding:"required"`   // Captcha verify id
 	CaptchaCode string `json:"captcha_code" binding:"required"` // Captcha verify code
 }
@@ -24,13 +22,12 @@ func (a *LoginForm) Trim() *LoginForm {
 }
 
 type RegisterForm struct {
-	FirstName       string `json:"first_name" binding:"required"`
-	LastName        string `json:"last_name" binding:"required"`
-	Email           string `json:"email" binding:"required"`
-	Password        string `json:"password" binding:"required"`
-	PasswordConfirm string `json:"password_confirm" binding:"required"`
-	CaptchaID       string `json:"captcha_id" binding:"required"`
-	CaptchaCode     string `json:"captcha_code" binding:"required"`
+	FirstName   string `json:"first_name" binding:"required"` // First name
+	LastName    string `json:"last_name" binding:"required"`  // Last name
+	Email       string `json:"email" binding:"required"`      //Register email
+	Password    string `json:"password" binding:"required"`   //Register password
+	CaptchaID   string `json:"captcha_id" binding:"required"`
+	CaptchaCode string `json:"captcha_code" binding:"required"`
 }
 
 func (a *RegisterForm) Trim() *RegisterForm {
@@ -42,20 +39,12 @@ func (a *RegisterForm) Trim() *RegisterForm {
 }
 
 // Convert `UserForm` to `User` object.
-func (a *RegisterForm) FillTo(user *User) error {
-	user.Email = a.Email
-	user.FirstName = a.FirstName
-	user.LastName = a.LastName
-	user.FullName = a.FirstName + " " + a.LastName
-
-	if pass := a.Password; pass != "" {
-		hashPass, err := hash.GeneratePassword(pass)
-		if err != nil {
-			return errors.BadRequest("", "Failed to generate hash password: %s", err.Error())
-		}
-		user.Password = hashPass
-	}
-
+func (a *RegisterForm) FillTo(userForm *UserForm) error {
+	userForm.Email = a.Email
+	userForm.FirstName = a.FirstName
+	userForm.LastName = a.LastName
+	userForm.Status = "active"
+	userForm.Password = a.Password
 	return nil
 }
 

@@ -779,6 +779,344 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/permissions": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "PermissionAPI"
+                ],
+                "summary": "Query role list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "pagination index",
+                        "name": "current",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "pagination size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Display name of role",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status of role (disabled, enabled)",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/util.ResponseResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Permission"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "PermissionAPI"
+                ],
+                "summary": "Create role record",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.PermissionForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/util.ResponseResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Permission"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/permissions/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "PermissionAPI"
+                ],
+                "summary": "Get role record by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "unique id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/util.ResponseResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Permission"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "PermissionAPI"
+                ],
+                "summary": "Update role record by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "unique id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.PermissionForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "PermissionAPI"
+                ],
+                "summary": "Delete role record by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "unique id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "AuthAPI"
+                ],
+                "summary": "Login system with username and password",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/util.ResponseResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.LoginToken"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/roles": {
             "get": {
                 "security": [
@@ -1108,7 +1446,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Status of user (activated, freezed)",
+                        "description": "Status of user (active, inactive)",
                         "name": "status",
                         "in": "query"
                     }
@@ -1440,16 +1778,16 @@ const docTemplate = `{
                     "description": "Log data",
                     "type": "string"
                 },
+                "email_login": {
+                    "description": "From User.Username",
+                    "type": "string"
+                },
                 "id": {
                     "description": "Unique ID",
                     "type": "string"
                 },
                 "level": {
                     "description": "Log level",
-                    "type": "string"
-                },
-                "login_name": {
-                    "description": "From User.Username",
                     "type": "string"
                 },
                 "message": {
@@ -1473,7 +1811,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_name": {
-                    "description": "From User.Name",
+                    "description": "From User.FullName",
                     "type": "string"
                 }
             }
@@ -1483,8 +1821,8 @@ const docTemplate = `{
             "required": [
                 "captcha_code",
                 "captcha_id",
-                "password",
-                "username"
+                "email",
+                "password"
             ],
             "properties": {
                 "captcha_code": {
@@ -1495,12 +1833,12 @@ const docTemplate = `{
                     "description": "Captcha verify id",
                     "type": "string"
                 },
-                "password": {
-                    "description": "Login password (md5 hash)",
+                "email": {
+                    "description": "Login email",
                     "type": "string"
                 },
-                "username": {
-                    "description": "Login name",
+                "password": {
+                    "description": "Login password",
                     "type": "string"
                 }
             }
@@ -1686,11 +2024,126 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Permission": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Display name of permission",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "Create time",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Details about permission",
+                    "type": "string"
+                },
+                "http_method": {
+                    "description": "HTTP method",
+                    "type": "string"
+                },
+                "http_path": {
+                    "description": "HTTP path",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique ID",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Display name of permission",
+                    "type": "string"
+                },
+                "sequence": {
+                    "description": "Sequence for sorting",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "description": "Update time",
+                    "type": "string"
+                }
+            }
+        },
+        "model.PermissionForm": {
+            "type": "object",
+            "required": [
+                "code",
+                "http_method",
+                "http_path",
+                "name"
+            ],
+            "properties": {
+                "code": {
+                    "description": "Code of permission (unique)",
+                    "type": "string",
+                    "maxLength": 32
+                },
+                "description": {
+                    "description": "Details about permission",
+                    "type": "string"
+                },
+                "http_method": {
+                    "description": "HTTP method",
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "http_path": {
+                    "description": "HTTP path",
+                    "type": "string",
+                    "maxLength": 1024
+                },
+                "name": {
+                    "description": "Display name of permission",
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "sequence": {
+                    "description": "Sequence for sorting",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RegisterForm": {
+            "type": "object",
+            "required": [
+                "captcha_code",
+                "captcha_id",
+                "email",
+                "first_name",
+                "last_name",
+                "password"
+            ],
+            "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Register email",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "First name",
+                    "type": "string"
+                },
+                "last_name": {
+                    "description": "Last name",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Register password",
+                    "type": "string"
+                }
+            }
+        },
         "model.Role": {
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "Code of role (unique)",
+                    "description": "Display name of role",
                     "type": "string"
                 },
                 "created_at": {
@@ -1715,6 +2168,13 @@ const docTemplate = `{
                 "name": {
                     "description": "Display name of role",
                     "type": "string"
+                },
+                "permissions": {
+                    "description": "Role permission list",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.RolePermission"
+                    }
                 },
                 "sequence": {
                     "description": "Sequence for sorting",
@@ -1759,6 +2219,13 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 128
                 },
+                "permissions": {
+                    "description": "Role permission list",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.RolePermission"
+                    }
+                },
                 "sequence": {
                     "description": "Sequence for sorting",
                     "type": "integer"
@@ -1798,18 +2265,48 @@ const docTemplate = `{
                 }
             }
         },
+        "model.RolePermission": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Create time",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique ID",
+                    "type": "string"
+                },
+                "permission_id": {
+                    "description": "From Permission.ID",
+                    "type": "string"
+                },
+                "permission_name": {
+                    "description": "From Role.Name",
+                    "type": "string"
+                },
+                "role_id": {
+                    "description": "From Role.ID",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Update time",
+                    "type": "string"
+                }
+            }
+        },
         "model.UpdateCurrentUser": {
             "type": "object",
             "required": [
-                "name"
+                "first_name",
+                "last_name"
             ],
             "properties": {
-                "email": {
-                    "description": "Email of user",
+                "first_name": {
+                    "description": "Name of user",
                     "type": "string",
-                    "maxLength": 128
+                    "maxLength": 64
                 },
-                "name": {
+                "last_name": {
                     "description": "Name of user",
                     "type": "string",
                     "maxLength": 64
@@ -1851,15 +2348,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email": {
-                    "description": "Email of user",
+                    "description": "Email for login",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "First Name of user",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "Full Name of user",
                     "type": "string"
                 },
                 "id": {
                     "description": "Unique ID",
                     "type": "string"
                 },
-                "name": {
-                    "description": "Name of user",
+                "last_name": {
+                    "description": "Last Name of user",
                     "type": "string"
                 },
                 "phone": {
@@ -1878,15 +2383,11 @@ const docTemplate = `{
                     }
                 },
                 "status": {
-                    "description": "Status of user (activated, freezed)",
+                    "description": "Status of user (active, inactive)",
                     "type": "string"
                 },
                 "updated_at": {
                     "description": "Update time",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "Username for login",
                     "type": "string"
                 }
             }
@@ -1894,19 +2395,25 @@ const docTemplate = `{
         "model.UserForm": {
             "type": "object",
             "required": [
-                "name",
-                "roles",
-                "status",
-                "username"
+                "email",
+                "first_name",
+                "last_name",
+                "password",
+                "status"
             ],
             "properties": {
                 "email": {
-                    "description": "Email of user",
+                    "description": "Username for login",
                     "type": "string",
                     "maxLength": 128
                 },
-                "name": {
-                    "description": "Name of user",
+                "first_name": {
+                    "description": "First Name of user",
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "last_name": {
+                    "description": "Last Name of user",
                     "type": "string",
                     "maxLength": 64
                 },
@@ -1933,17 +2440,12 @@ const docTemplate = `{
                     }
                 },
                 "status": {
-                    "description": "Status of user (activated, freezed)",
+                    "description": "Status of user (active, inactive)",
                     "type": "string",
                     "enum": [
-                        "activated",
-                        "freezed"
+                        "active",
+                        "inactive"
                     ]
-                },
-                "username": {
-                    "description": "Username for login",
-                    "type": "string",
-                    "maxLength": 64
                 }
             }
         },
@@ -1983,6 +2485,9 @@ const docTemplate = `{
                 "error": {
                     "$ref": "#/definitions/errors.Error"
                 },
+                "message": {
+                    "type": "string"
+                },
                 "success": {
                     "type": "boolean"
                 },
@@ -2008,7 +2513,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "go-admin",
-	Description:      "A lightweight, flexible, elegant and full-featured RBAC scaffolding based on GIN + GORM 2.0 + Casbin 2.0 + Wire DI.",
+	Description:      "go admin manager user.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

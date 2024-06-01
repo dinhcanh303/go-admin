@@ -67,11 +67,11 @@ func (a *Auth) Login(c *gin.Context) {
 
 // @Tags AuthAPI
 // @Summary Login system with username and password
-// @Param body body model.LoginForm true "Request body"
+// @Param body body model.RegisterForm true "Request body"
 // @Success 200 {object} util.ResponseResult{data=model.LoginToken}
 // @Failure 400 {object} util.ResponseResult
 // @Failure 500 {object} util.ResponseResult
-// @Router /api/v1/login [post]
+// @Router /api/v1/register [post]
 func (a *Auth) Register(c *gin.Context) {
 	ctx := c.Request.Context()
 	item := new(model.RegisterForm)
@@ -79,12 +79,12 @@ func (a *Auth) Register(c *gin.Context) {
 		util.ResError(c, err)
 		return
 	}
-	err := a.AuthService.Register(ctx, item.Trim())
+	data, err := a.AuthService.Register(ctx, item.Trim())
 	if err != nil {
 		util.ResError(c, err)
 		return
 	}
-	util.ResSuccess(c, "", "Register Successfully .Please check mail active account")
+	util.ResSuccess(c, data, "Register Successfully")
 }
 
 // @Tags AuthAPI

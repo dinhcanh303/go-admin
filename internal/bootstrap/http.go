@@ -55,7 +55,6 @@ func startHTTPServer(ctx context.Context, injector *wirex.Injector) (func(), err
 	if err := injector.Mods.RegisterRouters(ctx, e); err != nil {
 		return nil, err
 	}
-
 	// Register swagger
 	if !config.C.General.DisableSwagger {
 		e.StaticFile("/openapi.json", filepath.Join(config.C.General.WorkDir, "openapi.json"))

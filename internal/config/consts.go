@@ -1,8 +1,9 @@
 package config
 
 const (
-	CacheNSForUser = "user"
-	CacheNSForRole = "role"
+	CacheNSForUser       = "user"
+	CacheNSForRole       = "role"
+	CacheNSForPermission = "permission"
 )
 
 const (

@@ -67,7 +67,7 @@ func TestUser(t *testing.T) {
 		Password:  hash.MD5String("test"),
 		Phone:     "0720",
 		Remark:    "test user",
-		Status:    model.UserStatusActivated,
+		Status:    model.UserStatusActive,
 		Roles:     model.UserRoles{{RoleID: role.ID}},
 	}
 
@@ -87,7 +87,7 @@ func TestUser(t *testing.T) {
 	assert.GreaterOrEqual(len(users), 1)
 
 	newName := "Test 1"
-	newStatus := model.UserStatusFreezed
+	newStatus := model.UserStatusInactive
 	user.FirstName = newName
 	user.Status = newStatus
 	e.PUT(baseAPI + "/users/" + user.ID).WithJSON(user).Expect().Status(http.StatusOK)

@@ -17,7 +17,7 @@ type RoleMenu struct {
 }
 
 func (a *RoleMenu) TableName() string {
-	return config.C.FormatTableName("role_menu")
+	return config.C.FormatTableName("role_menus")
 }
 
 // Defining the query parameters for the `RoleMenu` struct.

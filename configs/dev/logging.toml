@@ -19,7 +19,7 @@ MaxThread = 2
 [Logger.Hooks.Options]
 Debug = "false"
 DBType = "postgres" # sqlite3/mysql/postgres
-DSN = "data/go-admin.db"
+DSN = "host=localhost user=postgres password=123456 dbname=go-admin port=5432 sslmode=disable"
 MaxOpenConns = "16"
 MaxIdleConns = "4"
 MaxLifetime = "86400"

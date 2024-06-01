@@ -15,11 +15,12 @@ import (
 
 // Role management for RBAC
 type Role struct {
-	Cache        cachex.Cacher
-	Trans        *util.Trans
-	RoleRepo     *repo.Role
-	RoleMenuRepo *repo.RoleMenu
-	UserRoleRepo *repo.UserRole
+	Cache              cachex.Cacher
+	Trans              *util.Trans
+	RoleRepo           *repo.Role
+	RoleMenuRepo       *repo.RoleMenu
+	RolePermissionRepo *repo.RolePermission
+	UserRoleRepo       *repo.UserRole
 }
 
 // Query roles from the data access object based on the provided parameters and options.
@@ -96,6 +97,14 @@ func (a *Role) Create(ctx context.Context, formItem *model.RoleForm) (*model.Rol
 				return err
 			}
 		}
+		for _, rolePermission := range formItem.Permissions {
+			rolePermission.ID = util.NewXID()
+			rolePermission.RoleID = role.ID
+			rolePermission.CreatedAt = time.Now()
+			if err := a.RolePermissionRepo.Create(ctx, rolePermission); err != nil {
+				return err
+			}
+		}
 		return a.syncToCasbin(ctx)
 	})
 	if err != nil {
@@ -143,6 +152,22 @@ func (a *Role) Update(ctx context.Context, id string, formItem *model.RoleForm) 
 			}
 			roleMenu.UpdatedAt = time.Now()
 			if err := a.RoleMenuRepo.Create(ctx, roleMenu); err != nil {
+				return err
+			}
+		}
+		if err := a.RolePermissionRepo.DeleteByRoleID(ctx, id); err != nil {
+			return err
+		}
+		for _, rolePermission := range formItem.Permissions {
+			if rolePermission.ID == "" {
+				rolePermission.ID = util.NewXID()
+			}
+			rolePermission.RoleID = role.ID
+			if rolePermission.CreatedAt.IsZero() {
+				rolePermission.CreatedAt = time.Now()
+			}
+			rolePermission.UpdatedAt = time.Now()
+			if err := a.RolePermissionRepo.Create(ctx, rolePermission); err != nil {
 				return err
 			}
 		}

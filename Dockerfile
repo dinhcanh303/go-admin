@@ -25,4 +25,4 @@ COPY --from=builder /go/src/${APP}/${APP} /usr/bin/
 # COPY --from=builder /go/src/${APP}/configs /usr/bin/configs
 # COPY --from=builder /go/src/${APP}/dist /usr/bin/dist
 ENTRYPOINT ["go-admin", "start", "-d", "/usr/bin/configs", "-c", "prod", "-s", "/usr/bin/dist"]
-EXPOSE 8001
+EXPOSE 5001

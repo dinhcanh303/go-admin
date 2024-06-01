@@ -46,3 +46,9 @@ serve-d: build
 
 stop:
 	./$(SERVER_BIN) stop
+
+docker: docker-stop docker-start
+docker-start:
+	docker-compose up -d
+docker-stop:
+	docker-compose down

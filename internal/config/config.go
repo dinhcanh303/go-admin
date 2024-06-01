@@ -25,10 +25,11 @@ type General struct {
 	DisablePrintConfig bool
 	DefaultLoginPwd    string `default:"6351623c8cef86fefabfa7da046fc619"` // MD5(abc-123)
 	WorkDir            string // From command arguments
+	ThirdPartyDir      string `default:"./third_party"`
 	MenuFile           string // From schema.Menus (JSON/YAML)
 	DenyDeleteMenu     bool
 	HTTP               struct {
-		Addr            string `default:":8040"`
+		Addr            string `default:":5001"`
 		ShutdownTimeout int    `default:"10"` // seconds
 		ReadTimeout     int    `default:"60"` // seconds
 		WriteTimeout    int    `default:"60"` // seconds
@@ -37,12 +38,10 @@ type General struct {
 		KeyFile         string
 	}
 	Root struct {
-		ID        string `default:"root"`
-		Email     string `default:"admin@admin.com"`
-		FirstName string `default:admin"`
-		LastName  string `default:admin"`
-		Password  string
-		Name      string `default:"Admin"`
+		ID       string `default:"root"`
+		Email    string `default:"admin@admin.com"`
+		FullName string `default:"Admin"`
+		Password string
 	}
 }
 

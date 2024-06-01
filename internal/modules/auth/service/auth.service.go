@@ -73,7 +73,7 @@ func (a *Auth) ParseUserID(c *gin.Context) (string, error) {
 	})
 	if err != nil {
 		return "", err
-	} else if user == nil || user.Status != model.UserStatusActivated {
+	} else if user == nil || user.Status != model.UserStatusActive {
 		return "", invalidToken
 	}
 
@@ -149,13 +149,11 @@ func (a *Auth) Login(ctx context.Context, formItem *model.LoginForm) (*model.Log
 	}
 
 	ctx = logging.NewTag(ctx, logging.TagKeyLogin)
-
 	// login by root
 	if formItem.Email == config.C.General.Root.Email {
-		if formItem.Password != config.C.General.Root.Password {
-			return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "Incorrect username or password")
+		if hash.MD5([]byte(formItem.Password)) != config.C.General.Root.Password {
+			return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "Incorrect email or password")
 		}
-
 		userID := config.C.General.Root.ID
 		ctx = logging.NewUserID(ctx, userID)
 		logging.Context(ctx).Info("Login by root")
@@ -171,14 +169,14 @@ func (a *Auth) Login(ctx context.Context, formItem *model.LoginForm) (*model.Log
 	if err != nil {
 		return nil, err
 	} else if user == nil {
-		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "Incorrect username or password")
-	} else if user.Status != model.UserStatusActivated {
-		return nil, errors.BadRequest("", "User status is not activated, please contact the administrator")
+		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "Incorrect email or password")
+	} else if user.Status != model.UserStatusActive {
+		return nil, errors.BadRequest("", "User status is not active, please contact the administrator")
 	}
 
 	// check password
 	if err := hash.CompareHashAndPassword(user.Password, formItem.Password); err != nil {
-		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "Incorrect username or password")
+		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "Incorrect email or password")
 	}
 
 	userID := user.ID
@@ -202,37 +200,35 @@ func (a *Auth) Login(ctx context.Context, formItem *model.LoginForm) (*model.Log
 	return a.genUserToken(ctx, userID)
 }
 
-func (a *Auth) Register(ctx context.Context, formItem *model.RegisterForm) error {
+func (a *Auth) Register(ctx context.Context, formItem *model.RegisterForm) (*model.LoginToken, error) {
 	// verify captcha
 	if !captcha.VerifyString(formItem.CaptchaID, formItem.CaptchaCode) {
-		return errors.BadRequest(config.ErrInvalidCaptchaID, "Incorrect captcha")
+		return nil, errors.BadRequest(config.ErrInvalidCaptchaID, "Incorrect captcha")
 	}
 	ctx = logging.NewTag(ctx, logging.TagKeyRegister)
-	existsEmail, err := a.UserRepo.ExistsEmail(ctx, formItem.Email)
+	userForm := &model.UserForm{}
+	if err := formItem.FillTo(userForm); err != nil {
+		return nil, err
+	}
+	user, err := a.UserService.Create(ctx, userForm)
 	if err != nil {
-		return err
-	} else if existsEmail {
-		return errors.BadRequest("", "Email already exists")
+		return nil, err
 	}
-	user := &model.User{
-		ID:        util.NewXID(),
-		CreatedAt: time.Now(),
-	}
-	if err := formItem.FillTo(user); err != nil {
-		return err
-	}
-	err = a.Trans.Exec(ctx, func(ctx context.Context) error {
-		if err := a.UserRepo.Create(ctx, user); err != nil {
-			return err
-		}
-		return nil
-	})
+	userID := user.ID
+	ctx = logging.NewUserID(ctx, userID)
+	// set user cache with role ids
+	roleIDs, err := a.UserService.GetRoleIDs(ctx, userID)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	ctx = logging.NewUserID(ctx, user.ID)
+	userCache := util.UserCache{RoleIDs: roleIDs}
+	err = a.Cache.Set(ctx, config.CacheNSForUser, userID, userCache.String(),
+		time.Duration(config.C.Dictionary.UserCacheExp)*time.Hour)
+	if err != nil {
+		logging.Context(ctx).Error("Failed to set cache", zap.Error(err))
+	}
 	logging.Context(ctx).Info("Register success", zap.String("email", formItem.Email))
-	return nil
+	return a.genUserToken(ctx, userID)
 }
 
 func (a *Auth) RefreshToken(ctx context.Context) (*model.LoginToken, error) {
@@ -247,7 +243,7 @@ func (a *Auth) RefreshToken(ctx context.Context) (*model.LoginToken, error) {
 		return nil, err
 	} else if user == nil {
 		return nil, errors.BadRequest("", "Incorrect user")
-	} else if user.Status != model.UserStatusActivated {
+	} else if user.Status != model.UserStatusActive {
 		return nil, errors.BadRequest("", "User status is not activated, please contact the administrator")
 	}
 
@@ -271,7 +267,6 @@ func (a *Auth) Logout(ctx context.Context) error {
 		logging.Context(ctx).Error("Failed to delete user cache", zap.Error(err))
 	}
 	logging.Context(ctx).Info("Logout success")
-
 	return nil
 }
 
@@ -279,11 +274,10 @@ func (a *Auth) Logout(ctx context.Context) error {
 func (a *Auth) GetUserInfo(ctx context.Context) (*model.User, error) {
 	if util.FromIsRootUser(ctx) {
 		return &model.User{
-			ID:        config.C.General.Root.ID,
-			Email:     config.C.General.Root.Email,
-			FirstName: config.C.General.Root.FirstName,
-			LastName:  config.C.General.Root.LastName,
-			Status:    model.UserStatusActivated,
+			ID:       config.C.General.Root.ID,
+			Email:    config.C.General.Root.Email,
+			FullName: config.C.General.Root.FullName,
+			Status:   model.UserStatusActive,
 		}, nil
 	}
 

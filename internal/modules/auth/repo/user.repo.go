@@ -28,11 +28,11 @@ func (a *User) Query(ctx context.Context, params model.UserQueryParam, opts ...m
 	}
 
 	db := GetUserDB(ctx, a.DB)
-	if v := params.LikeUsername; len(v) > 0 {
-		db = db.Where("username LIKE ?", "%"+v+"%")
+	if v := params.LikeEmail; len(v) > 0 {
+		db = db.Where("email LIKE ?", "%"+v+"%")
 	}
-	if v := params.LikeName; len(v) > 0 {
-		db = db.Where("name LIKE ?", "%"+v+"%")
+	if v := params.LikeFullName; len(v) > 0 {
+		db = db.Where("full_name LIKE ?", "%"+v+"%")
 	}
 	if v := params.Status; len(v) > 0 {
 		db = db.Where("status = ?", v)

@@ -15,12 +15,13 @@ import (
 )
 
 type Auth struct {
-	DB      *gorm.DB
-	MenuAPI *api.Menu
-	RoleAPI *api.Role
-	UserAPI *api.User
-	AuthAPI *api.Auth
-	Casbinx *Casbinx
+	DB            *gorm.DB
+	MenuAPI       *api.Menu
+	RoleAPI       *api.Role
+	UserAPI       *api.User
+	AuthAPI       *api.Auth
+	PermissionAPI *api.Permission
+	Casbinx       *Casbinx
 }
 
 func (a *Auth) AutoMigrate(ctx context.Context) error {
@@ -31,6 +32,7 @@ func (a *Auth) AutoMigrate(ctx context.Context) error {
 		new(model.RoleMenu),
 		new(model.User),
 		new(model.UserRole),
+		new(model.Permission),
 	)
 }
 
@@ -62,6 +64,7 @@ func (a *Auth) RegisterV1Routers(ctx context.Context, v1 *gin.RouterGroup) error
 		captcha.GET("image", a.AuthAPI.ResponseCaptcha)
 	}
 	v1.POST("login", a.AuthAPI.Login)
+	v1.POST("register", a.AuthAPI.Register)
 
 	current := v1.Group("current")
 	{
@@ -79,6 +82,14 @@ func (a *Auth) RegisterV1Routers(ctx context.Context, v1 *gin.RouterGroup) error
 		menu.POST("", a.MenuAPI.Create)
 		menu.PUT(":id", a.MenuAPI.Update)
 		menu.DELETE(":id", a.MenuAPI.Delete)
+	}
+	permission := v1.Group("permissions")
+	{
+		permission.GET("", a.PermissionAPI.Query)
+		permission.GET(":id", a.PermissionAPI.Get)
+		permission.POST("", a.PermissionAPI.Create)
+		permission.PUT(":id", a.PermissionAPI.Update)
+		permission.DELETE(":id", a.PermissionAPI.Delete)
 	}
 	role := v1.Group("roles")
 	{

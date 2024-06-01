@@ -12,7 +12,7 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
     ports:
-      - 5445:5432
+      - 5432:5432
     volumes:
       - pg-data:/var/lib/postgresql/data
     networks:
@@ -21,8 +21,6 @@ services:
     image: redis
     container_name: go-admin-redis
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       - REDIS_PASSWORD=password
       - REDIS_REPLICATION_mode=master
@@ -37,23 +35,16 @@ services:
     volumes:
       - redis_data:/var/lib/redis
     ports:
-      - 6001:6001
+      - 8001:8001
     networks:
       - go-admin
   app:
-    build:
-      context: .
+    build: .
     image: app
     container_name: go-admin-app
     restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      APP_NAME: 'search-service in docker'
-    depends_on:
-      - notification
     ports:
-      - 8001:8001
+      - 5001:5001
     networks:
       - go-admin
   prometheus:

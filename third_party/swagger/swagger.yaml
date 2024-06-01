@@ -24,14 +24,14 @@ definitions:
       data:
         description: Log data
         type: string
+      email_login:
+        description: From User.Username
+        type: string
       id:
         description: Unique ID
         type: string
       level:
         description: Log level
-        type: string
-      login_name:
-        description: From User.Username
         type: string
       message:
         description: Log message
@@ -49,7 +49,7 @@ definitions:
         description: User ID
         type: string
       user_name:
-        description: From User.Name
+        description: From User.FullName
         type: string
     type: object
   model.LoginForm:
@@ -60,17 +60,17 @@ definitions:
       captcha_id:
         description: Captcha verify id
         type: string
-      password:
-        description: Login password (md5 hash)
+      email:
+        description: Login email
         type: string
-      username:
-        description: Login name
+      password:
+        description: Login password
         type: string
     required:
     - captcha_code
     - captcha_id
+    - email
     - password
-    - username
     type: object
   model.LoginToken:
     properties:
@@ -205,10 +205,96 @@ definitions:
         description: Update time
         type: string
     type: object
+  model.Permission:
+    properties:
+      code:
+        description: Display name of permission
+        type: string
+      created_at:
+        description: Create time
+        type: string
+      description:
+        description: Details about permission
+        type: string
+      http_method:
+        description: HTTP method
+        type: string
+      http_path:
+        description: HTTP path
+        type: string
+      id:
+        description: Unique ID
+        type: string
+      name:
+        description: Display name of permission
+        type: string
+      sequence:
+        description: Sequence for sorting
+        type: integer
+      updated_at:
+        description: Update time
+        type: string
+    type: object
+  model.PermissionForm:
+    properties:
+      code:
+        description: Code of permission (unique)
+        maxLength: 32
+        type: string
+      description:
+        description: Details about permission
+        type: string
+      http_method:
+        description: HTTP method
+        maxLength: 255
+        type: string
+      http_path:
+        description: HTTP path
+        maxLength: 1024
+        type: string
+      name:
+        description: Display name of permission
+        maxLength: 128
+        type: string
+      sequence:
+        description: Sequence for sorting
+        type: integer
+    required:
+    - code
+    - http_method
+    - http_path
+    - name
+    type: object
+  model.RegisterForm:
+    properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        type: string
+      email:
+        description: Register email
+        type: string
+      first_name:
+        description: First name
+        type: string
+      last_name:
+        description: Last name
+        type: string
+      password:
+        description: Register password
+        type: string
+    required:
+    - captcha_code
+    - captcha_id
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
   model.Role:
     properties:
       code:
-        description: Code of role (unique)
+        description: Display name of role
         type: string
       created_at:
         description: Create time
@@ -227,6 +313,11 @@ definitions:
       name:
         description: Display name of role
         type: string
+      permissions:
+        description: Role permission list
+        items:
+          $ref: '#/definitions/model.RolePermission'
+        type: array
       sequence:
         description: Sequence for sorting
         type: integer
@@ -255,6 +346,11 @@ definitions:
         description: Display name of role
         maxLength: 128
         type: string
+      permissions:
+        description: Role permission list
+        items:
+          $ref: '#/definitions/model.RolePermission'
+        type: array
       sequence:
         description: Sequence for sorting
         type: integer
@@ -287,13 +383,34 @@ definitions:
         description: Update time
         type: string
     type: object
+  model.RolePermission:
+    properties:
+      created_at:
+        description: Create time
+        type: string
+      id:
+        description: Unique ID
+        type: string
+      permission_id:
+        description: From Permission.ID
+        type: string
+      permission_name:
+        description: From Role.Name
+        type: string
+      role_id:
+        description: From Role.ID
+        type: string
+      updated_at:
+        description: Update time
+        type: string
+    type: object
   model.UpdateCurrentUser:
     properties:
-      email:
-        description: Email of user
-        maxLength: 128
+      first_name:
+        description: Name of user
+        maxLength: 64
         type: string
-      name:
+      last_name:
         description: Name of user
         maxLength: 64
         type: string
@@ -306,7 +423,8 @@ definitions:
         maxLength: 1024
         type: string
     required:
-    - name
+    - first_name
+    - last_name
     type: object
   model.UpdateLoginPassword:
     properties:
@@ -326,13 +444,19 @@ definitions:
         description: Create time
         type: string
       email:
-        description: Email of user
+        description: Email for login
+        type: string
+      first_name:
+        description: First Name of user
+        type: string
+      full_name:
+        description: Full Name of user
         type: string
       id:
         description: Unique ID
         type: string
-      name:
-        description: Name of user
+      last_name:
+        description: Last Name of user
         type: string
       phone:
         description: Phone number of user
@@ -346,23 +470,24 @@ definitions:
           $ref: '#/definitions/model.UserRole'
         type: array
       status:
-        description: Status of user (activated, freezed)
+        description: Status of user (active, inactive)
         type: string
       updated_at:
         description: Update time
-        type: string
-      username:
-        description: Username for login
         type: string
     type: object
   model.UserForm:
     properties:
       email:
-        description: Email of user
+        description: Username for login
         maxLength: 128
         type: string
-      name:
-        description: Name of user
+      first_name:
+        description: First Name of user
+        maxLength: 64
+        type: string
+      last_name:
+        description: Last Name of user
         maxLength: 64
         type: string
       password:
@@ -383,20 +508,17 @@ definitions:
           $ref: '#/definitions/model.UserRole'
         type: array
       status:
-        description: Status of user (activated, freezed)
+        description: Status of user (active, inactive)
         enum:
-        - activated
-        - freezed
-        type: string
-      username:
-        description: Username for login
-        maxLength: 64
+        - active
+        - inactive
         type: string
     required:
-    - name
-    - roles
+    - email
+    - first_name
+    - last_name
+    - password
     - status
-    - username
     type: object
   model.UserRole:
     properties:
@@ -424,6 +546,8 @@ definitions:
       data: {}
       error:
         $ref: '#/definitions/errors.Error'
+      message:
+        type: string
       success:
         type: boolean
       total:
@@ -431,8 +555,7 @@ definitions:
     type: object
 info:
   contact: {}
-  description: A lightweight, flexible, elegant and full-featured RBAC scaffolding
-    based on GIN + GORM 2.0 + Casbin 2.0 + Wire DI.
+  description: go admin manager user.
   title: go-admin
   version: v1.0.0
 paths:
@@ -893,6 +1016,210 @@ paths:
       summary: Update menu record by ID
       tags:
       - MenuAPI
+  /api/v1/permissions:
+    get:
+      parameters:
+      - default: 1
+        description: pagination index
+        in: query
+        name: current
+        required: true
+        type: integer
+      - default: 10
+        description: pagination size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      - description: Display name of role
+        in: query
+        name: name
+        type: string
+      - description: Status of role (disabled, enabled)
+        in: query
+        name: status
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Permission'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Query role list
+      tags:
+      - PermissionAPI
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.PermissionForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Permission'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Create role record
+      tags:
+      - PermissionAPI
+  /api/v1/permissions/{id}:
+    delete:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete role record by ID
+      tags:
+      - PermissionAPI
+    get:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Permission'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Get role record by ID
+      tags:
+      - PermissionAPI
+    put:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.PermissionForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Update role record by ID
+      tags:
+      - PermissionAPI
+  /api/v1/register:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.LoginToken'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      summary: Login system with username and password
+      tags:
+      - AuthAPI
   /api/v1/roles:
     get:
       parameters:
@@ -1090,7 +1417,7 @@ paths:
         in: query
         name: name
         type: string
-      - description: Status of user (activated, freezed)
+      - description: Status of user (active, inactive)
         in: query
         name: status
         type: string

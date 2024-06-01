@@ -13,7 +13,7 @@ var VERSION = "v1.0.0"
 
 // @title go-admin
 // @version v1.0.0
-// @description A lightweight, flexible, elegant and full-featured RBAC scaffolding based on GIN + GORM 2.0 + Casbin 2.0 + Wire DI.
+// @description go admin manager user.
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
@@ -23,7 +23,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "go-admin"
 	app.Version = VERSION
-	app.Usage = "A lightweight, flexible, elegant and full-featured RBAC scaffolding based on GIN + GORM 2.0 + Casbin 2.0 + Wire DI."
+	app.Usage = "go admin manager user."
 	app.Commands = []*cli.Command{
 		cmd.StartCmd(),
 		cmd.StopCmd(),
