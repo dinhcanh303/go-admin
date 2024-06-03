@@ -3,7 +3,7 @@ version: "3"
 services:
   postgres:
     image: postgres
-    container_name: go-admin-pg
+    container_name: pg
     restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
@@ -16,10 +16,10 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
     networks:
-      - go-admin
+      - go-admin-network
   redis:
     image: redis
-    container_name: go-admin-redis
+    container_name: redis
     restart: unless-stopped
     environment:
       - REDIS_PASSWORD=password
@@ -27,7 +27,7 @@ services:
     ports:
       - 6379:6379
     networks:
-      - go-admin
+      - go-admin-network
   redisinsight:
     image: redislabs/redisinsight
     container_name: go-admin-redisinsight
@@ -37,24 +37,32 @@ services:
     ports:
       - 8001:8001
     networks:
-      - go-admin
-  app:
-    build: .
-    image: app
-    container_name: go-admin-app
+      - go-admin-network
+  # go-admin:
+  #   build: .
+  #   image: go-admin
+  #   container_name: go-admin
+  #   restart: unless-stopped
+  #   ports:
+  #     - 5001:5001
+  #   networks:
+  #     - go-admin-network
+  go-admin:
+    image: dinhcanh/go-admin:latest
+    container_name: go-admin
     restart: unless-stopped
     ports:
       - 5001:5001
     networks:
-      - go-admin
+      - go-admin-network
   prometheus:
     image: prom/prometheus
-    container_name: go-admin-prom
+    container_name: prom
     restart: unless-stopped
     volumes:
       - prometheus_data:/prometheus
     networks:
-      - go-admin
+      - go-admin-network
     ports:
       - "9090:9090"
 volumes:
@@ -63,6 +71,6 @@ volumes:
   prometheus_data: {}
 
 networks:
-    go-admin:
+    go-admin-network:
       driver: bridge
-      name: go-admin
+      name: go-admin-network
